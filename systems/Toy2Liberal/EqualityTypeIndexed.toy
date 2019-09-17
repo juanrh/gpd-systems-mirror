@@ -1,0 +1,26 @@
+/* Equality using type-indexed functions */
+
+include "misc.toy"
+% to include boolean functions
+
+data nat = z | s nat
+
+
+eq :: A -> A -> bool
+
+eq true true   = true
+eq true false  = false
+eq false false = true
+eq false true  = false
+
+eq z z         = true
+eq z (s X)     = false
+eq (s X) z     = false
+eq (s X) (s Y) = eq X Y
+
+eq (X1,Y1) (X2,Y2) = and (eq X1 X2) (eq Y1 Y2)
+
+eq [] []       = true
+eq [] (Y:Ys)   = false
+eq (X:Xs) []   = false
+eq (X:Xs) (Y:Ys) = and (eq X Y) (eq Xs Ys)

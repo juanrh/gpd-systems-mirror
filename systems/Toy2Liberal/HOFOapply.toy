@@ -1,0 +1,30 @@
+/* Ho to Fo translation: apply */
+
+include "misc.toy"
+
+data nat = z | s nat
+
+
+append :: [A] -> [A] -> [A]
+append [] Xs = Xs
+append (X:Xs) Ys = X : (append Xs Ys)
+
+add :: nat -> nat -> nat
+add z Y = Y
+add (s X) Y = s (add X Y)
+
+% snd is defined for tuples in misc.toy
+msnd :: A -> B -> B
+msnd X Y = Y
+
+apply :: (A -> B) -> A -> B
+apply s X = s X
+apply (:) X = (:) X
+apply ((:) X) Y =  X:Y
+apply append X = append X
+apply (append X) Y = append X Y
+apply add X = add X
+apply (add X) Y = add X Y
+apply msnd X = msnd X
+apply (msnd X) Y = msnd X Y
+apply length X = length X

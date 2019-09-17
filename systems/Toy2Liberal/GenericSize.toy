@@ -1,0 +1,21 @@
+/* size as a generic function */
+
+include "misc.toy"
+
+data nat = z | s nat
+data univ = c int [univ]
+
+usize :: univ -> int
+usize (c N Xs) = 1 + (foldr (+) 0 (map usize Xs))
+
+toU :: A -> univ
+toU true = c 0 []
+toU false = c 1 []
+toU z = c 2 []
+toU (s X) = c 3 [toU X]
+toU [] = c 4 []
+toU (X:Xs) = c 5 [toU X, toU Xs]
+
+gsize :: A -> int
+gsize = usize . toU
+

@@ -1,0 +1,86 @@
+/*
+* Example of translation of type classes using type-indexed functions and
+* type witnesses
+*/
+
+/*
+The original program with type classes is:
+------------------------------------------
+
+include "misc.toy"
+%include boolean functions
+
+data nat = z | s nat
+data mylist A = nil | cons A (mylist A)
+
+
+eqNat :: nat -> nat -> bool
+eqNat z z         = true
+eqNat z (s Y)     = false
+eqNat (s X) z     = false
+eqNat (s X) (s Y) = eqNat X Y
+
+class eq A where
+eq :: A -> A -> bool
+
+instance eq nat where
+eq X Y = eqNat X Y
+
+instance eq A => eq (mylist A) where
+eq nil nil                 = true
+eq nil (cons Y Ys)         = false
+eq (cons X Xs) nil         = false
+eq (cons X Xs) (cons Y Ys) = and (eq X Y) (eq Xs Ys)
+
+
+mymember :: eq A => mylist A -> A -> bool
+mymember nil Y = false
+mymember (X:Xs) Y = or (eq X Y) (mymember Xs Y)
+*/
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Translated program %
+%%%%%%%%%%%%%%%%%%%%%%
+
+include "misc.toy"
+%include boolean functions
+
+data nat = z | s nat | natW
+data mylist A = nil | cons A (mylist A) | mylistW A
+
+eqNat :: nat -> nat -> bool
+eqNat z z         = true
+eqNat z (s Y)     = false
+eqNat (s X) z     = false
+eqNat (s X) (s Y) = eqNat X Y
+
+
+eq :: A -> A -> A -> bool
+eq natW X Y = eqNat X Y
+eq (mylistW AW ) nil nil = true
+eq (mylistW AW ) nil (cons Y Ys) = false
+eq (mylistW AW ) (cons X Xs) nil = false
+eq (mylistW AW ) (cons X Xs) (cons Y Ys) = and (eq AW X Y) (eq (mylistW AW) Xs Ys)
+
+
+mymember :: A -> (mylist A) -> A -> bool
+mymember AW nil Y = false
+mymember AW (cons X Xs) Y = or (eq AW X Y) (mymember AW Xs Y)
+
+/*
+Some reductions:
+
+Toy> mymember natW (cons z (cons (s z) nil)) z == L
+      { L -> true } 
+      Elapsed time: 0 ms.
+sol.1, more solutions (y/n/d/a) [y]? 
+      no
+      Elapsed time: 0 ms.
+Toy> mymember natW (cons z (cons (s z) nil)) (s (s z)) == L
+      { L -> false } 
+      Elapsed time: 0 ms.
+sol.1, more solutions (y/n/d/a) [y]? 
+      no
+      Elapsed time: 0 ms.
+*/
+

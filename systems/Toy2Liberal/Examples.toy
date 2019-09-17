@@ -1,0 +1,52 @@
+/* Well and ill-typed rules and expressions
+   Rules in comments are ill-typed           */
+
+data nat = z | s nat
+
+snd :: A -> B -> B
+snd X Y = Y
+
+%g :: (C -> C) -> (A,B)
+%g (snd [X,Y]) = (X,Y)
+
+id :: A -> A
+id X = X
+
+%unpack :: (A -> A) -> B
+%unpack (snd X) = X
+
+
+eq :: A -> A -> bool
+eq z z = true
+eq z (s Y) = false
+eq (s X) z = false
+eq (s X) (s Y) = eq X Y
+
+showNat :: nat -> [char]
+showNat z = ['z']
+showNat (s X) = 's' : (showNat X)
+
+
+%f :: bool -> A
+%f true = z
+%f true = false
+
+
+flist :: [A] -> A
+flist [z] = s z
+flist [true] = false
+
+% ill-typed expressions
+
+%expr1 :: A
+%expr1 = id z true 
+
+%expr2 :: A
+%expr2 = snd z z true
+
+%expr3 :: A
+%expr3 = flist z 
+
+%expr4 :: bool
+%expr4 = eq z true
+

@@ -1,0 +1,25 @@
+/* existential types, opacity and HO patterns */
+
+data nat = z | s nat
+   
+snd :: A -> B -> B
+snd X Y = Y
+
+%data key where
+%   key :: A -> (A -> nat) -> key
+   
+%getKey :: key -> nat
+%getKey (key X F ) = F X 
+
+% Example similar to getKey but using partially applied functions instead of
+% non-transparent data constructors (the system does not support them)
+key :: A -> (A -> nat) -> bool -> bool
+key X F B = B
+
+getKey' :: (bool -> bool) -> nat
+getKey' (key X F) = F X
+
+
+idSnd :: (A -> A) -> (B -> B)
+idSnd (snd X) = snd X
+
