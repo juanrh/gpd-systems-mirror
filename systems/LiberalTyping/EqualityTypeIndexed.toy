@@ -1,0 +1,24 @@
+/* Equality using type-indexed functions */
+
+data bool = true | false
+data nat = z | s nat
+data pair A B = pair A B
+
+and :: bool -> bool -> bool
+and true X  = X
+and false X = false
+
+
+eq :: A -> A -> bool
+
+eq true true   = true
+eq true false  = false
+eq false false = true
+eq false true  = false
+
+eq z z         = true
+eq z (s X)     = false
+eq (s X) z     = false
+eq (s X) (s Y) = eq X Y
+
+eq (pair X1 Y1)(pair X2 Y2) = and (eq X1 X2) (eq Y1 Y2)

@@ -1,0 +1,18 @@
+/* size as a type-indexed function */
+
+data bool = true | false
+data nat = z | s nat
+data list A = nil | cons A (list A)
+
+add :: nat -> nat -> nat
+add z Y = Y
+add (s X) Y = s (add X Y)
+
+size :: A -> nat
+size true = s z
+size false = s z
+size z = s z    
+size (s X) = s (size X)
+size nil = s z   
+size (cons X Xs) = s (add (size X) (size Xs))
+

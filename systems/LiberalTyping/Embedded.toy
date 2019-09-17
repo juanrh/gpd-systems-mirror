@@ -1,0 +1,27 @@
+/* Embedded language from "Fun with phantom types" (R. Hinze) */
+
+data bool = true | false
+data nat = z | s nat
+
+data term T where
+   zero :: term nat
+   succ :: term nat -> term nat
+   iszero :: term nat -> term bool
+   tif :: term bool -> term T -> term T -> term T
+
+eqNat :: nat -> nat -> bool
+eqNat z z         = true
+eqNat z (s X)     = false
+eqNat (s X) z     = false
+eqNat (s X) (s Y) = eqNat X Y
+
+ifthenelse :: bool -> A -> A -> A
+ifthenelse true A B = A
+ifthenelse false A B = B
+   
+eval :: term T -> T
+eval zero = z
+eval (succ E) = s (eval E)
+eval (iszero E) = eqNat (eval E) z
+eval (tif E1 E2 E3) = ifthenelse (eval E1) (eval E2) (eval E3)
+

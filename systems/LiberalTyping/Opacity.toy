@@ -1,0 +1,17 @@
+/* existential types, opacity and HO patterns */
+
+data bool = true | false
+data nat = z | s nat
+
+data key where
+   key :: A -> (A -> nat) -> key
+   
+snd :: A -> B -> B
+snd X Y = Y
+   
+getKey :: key -> nat
+getKey (key X F ) = F X 
+
+idSnd :: (A -> A) -> (B -> B)
+idSnd (snd X) = snd X
+

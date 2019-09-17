@@ -1,0 +1,57 @@
+/* Well and ill-typed rules and expressions
+   Rules in comments are ill-typed           */
+
+data bool = true | false
+data nat = z | s nat
+data list A where
+   nil :: list A
+   cons :: A -> list A -> list A
+data repr A where
+   rnat :: repr nat
+
+
+id :: A -> A
+id X = X
+  
+snd :: A -> B -> B
+snd X Y = Y
+
+/* 
+unpack :: (A -> A) -> B
+unpack (snd X) = X
+*/
+
+eq :: A -> A -> bool
+eq (s X) z = false
+
+showNat :: nat -> list char
+showNat z = cons 'z' nil
+showNat (s X) = cons 's' (showNat X)
+
+show :: repr A -> A -> list char
+show rnat X = showNat X
+
+/* 
+f :: bool -> A
+f true = z
+f true = false
+*/
+
+flist :: list A -> A
+flist (cons z nil) = s z
+flist (cons true nil) = false
+
+/* ill-typed expressions */
+/*
+expr1 :: A
+expr1 = id z true 
+
+expr2 :: A
+expr2 = snd z z true
+
+expr3 :: A
+expr3 = flist z 
+
+expr4 :: bool
+expr4 = eq z true
+*/

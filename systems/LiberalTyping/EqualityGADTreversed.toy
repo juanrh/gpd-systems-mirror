@@ -1,0 +1,28 @@
+/* Equality using GADTs, reversed arguments*/
+
+data bool = true | false
+data nat = z | s nat
+data pair A B = pair A B
+data repr A where
+   rbool :: repr bool
+   rnat  :: repr nat
+   rpair :: repr A -> repr B -> repr (pair A B)
+
+and :: bool -> bool -> bool
+and true X  = X
+and false X = false
+
+
+eq :: A -> A -> repr A -> bool
+
+eq true true rbool  = true
+eq true false rbool = false
+eq false false rbool = true
+eq false true rbool = true
+
+eq z z rnat         = true
+eq z (s Y) rnat      = false
+eq (s X) z rnat     = false
+eq (s X) (s Y) rnat = eq X Y rnat
+
+eq (pair X1 Y1 ) (pair X2 Y2 ) (rpair Ra Rb) = and (eq X1 X2 Ra) (eq Y1 Y2 Rb) 

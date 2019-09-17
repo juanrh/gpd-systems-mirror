@@ -1,0 +1,30 @@
+/* Ho to Fo translation: apply */
+
+data bool = true | false
+data nat = z | s nat
+data list A = nil | cons A (list A)
+
+length :: list A -> nat
+length nil = z
+length (cons X Xs) = s (length Xs)
+
+append :: list A -> list A -> list A
+append nil Xs = Xs
+append (cons X Xs) Ys = cons X (append Xs Ys)
+
+add :: nat -> nat -> nat
+add z Y = Y
+add (s X) Y = s (add X Y)
+
+snd :: A -> B -> B
+snd X Y = Y
+
+apply :: (A -> B) -> A -> B
+apply s X = s X
+apply cons X = cons X
+apply (cons X) Y = cons X Y
+apply append X = append X
+apply (append X) Y = append X Y
+apply snd X = snd X
+apply (snd X) Y = snd X Y
+apply length X = length X

@@ -1,0 +1,36 @@
+/* size as a generic function */
+
+data bool = true | false
+data nat = z | s nat
+data list A = nil | cons A (list A)
+data univ = c nat (list univ)
+
+add :: nat -> nat -> nat
+add z Y = Y
+add (s X) Y = s (add X Y)
+
+map :: (A -> B) -> list A -> list B
+map F nil = nil
+map F (cons X Xs) = cons (F X) (map F Xs)
+
+foldr :: (A -> B -> B) -> B -> list A -> B
+foldr F Z nil = Z
+foldr F Z (cons X Xs) = F X (foldr F Z Xs)
+
+usize :: univ -> nat
+usize (c N Xs) = s (foldr add z (map usize Xs))
+
+toU :: A -> univ
+toU true = c z nil
+toU false = c (s z) nil
+toU z = c (s (s z)) nil
+toU (s X) = c (s (s (s z))) (cons (toU X) nil)
+toU nil = c (s (s (s (s z)))) nil
+toU (cons X Xs) = c (s (s (s (s (s z))))) (cons (toU X) (cons (toU Xs) nil) )
+
+comp :: (A -> B) -> (C -> A) -> C -> B
+comp F G X = F (G X)
+
+size :: A -> nat
+size = comp usize toU
+
