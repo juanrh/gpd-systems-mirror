@@ -1,0 +1,10 @@
+(plural CLERKS is
+  branches -> madrid .
+  branches -> vigo .
+  employees(madrid) -> e(john, men, clerk) .
+  employees(madrid) -> e(larry, men, boss) .
+  employees(vigo) -> e(mary, women, clerk) .
+  employees(vigo) -> e(james, men, boss) .
+  twoclerks -> search(employees(branches)) .
+  search(e(N,S,clerk)) -> p(N,N) .
+endp)

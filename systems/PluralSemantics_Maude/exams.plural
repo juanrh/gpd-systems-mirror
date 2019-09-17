@@ -1,0 +1,115 @@
+(plural EXAM is
+
+  team1 -> james ? lyla ? harry ? alice .
+  subjects1 -> knows(james, t1.1 ? t1.3) 
+             ? knows(lyla, t1.2 ? t3)
+             ? knows(harry, t2.1 ? t4) .
+
+  listInSet is sp .
+  listInSet(nil, K) -> tt .
+  listInSet(cons(K1, Ks), K) -> if eq(K, K1) then listInSet(Ks, K)  .
+
+
+  knowsAll is sp .
+  knowsAll(Questions, Knowledge) -> listInSet(Questions, Knowledge) .
+
+  mark is sp .
+  mark(q1, K) -> if knowsAll(cons(t1.1, cons(t1.2, nil)), K) then s(s(z)) .
+  mark(q2, K) -> if knowsAll(cons(t1.3, cons(t3, nil)), K) then s(z) .
+  mark(q3, K) -> if knowsAll(cons(t2.1, cons(t1.2, nil)), K) then s(z) .
+  mark(q4, K) -> if knowsAll(cons(t3.1, cons(t4, nil)), K) then s(z) .
+  mark(q2.1, K) -> if knowsAll(cons(t2.1, cons(t1.3, nil)), K) then s(z) .
+  mark(q2.2, K) -> if knowsAll(cons(t3.1, cons(t1.3, nil)), K) then s(z) .
+  mark(q3.1, K) -> if knowsAll(cons(t3.1, nil), K) then s(z) .
+  mark(q3.2, K) -> if knowsAll(cons(t3.2, nil), K) then s(z) .
+  mark(q4.1, K) -> if knowsAll(cons(t3, cons(t4, nil)), K) then s(z) .
+  mark(q4.2, K) -> if knowsAll(cons(t1.2, cons(t3.1, nil)), K) then s(z) .
+  mark(q5, K) -> if knowsAll(cons(t5, nil), K) then s(z) .
+  mark(q6, K) -> if knowsAll(cons(t6, nil), K) then s(z) .
+
+  markAll is sp .
+  markAll(nil, K) -> nil .
+  markAll(cons(Q, Qs), K) -> cons(mark(Q, K), markAll(Qs, K)) .
+
+  exam -> cons(q1 ,cons(q2 ,cons(q3 ,cons(q4 ,cons(q5 ,nil))))) .
+  
+  exams -> cons(q1,cons(q2.1,cons(q3.2,cons(q4.1,cons(q5,nil)))))
+         ? cons(q1,cons(q2.1,cons(q3.2,cons(q4.2,cons(q6,nil)))))
+         ? cons(q1,cons(q2.2,cons(q3,cons(q4.1,cons(q5,nil))))) .
+
+  someElems(Xs) -> nil .
+  someElems(cons(X, Xs)) -> cons(X, someElems(Xs)) .
+  someElems(cons(X, Xs)) -> someElems(Xs) .
+
+  answer is singular .
+  answer(Student, knows(S, Subject)) -> if eq(Student, S) then Subject .
+  
+  examine is spp .
+  examine(Exam, Team, Studies) -> p(Exam, sum(markAll(Exam, answer(Team, Studies)))) .
+
+  passes is spp .
+  passes(Exam, Team, Studies) -> minMark(examine(someElems(Exam), Team, Studies)) .
+  minMark(p(Exam, s(s(s(s(s(N))))))) -> p(Exam, s(s(s(s(s(N)))))) .
+
+  --------------------------------------------------------------
+  ------------------- Auxiliary functions ----------------------
+  --------------------------------------------------------------
+
+  sum(nil) -> zero .
+  sum(cons(X, Xs)) -> add(X, sum(Xs)) .
+
+  add is singular .
+  add(z, X) -> X .
+  add(s(N), M) -> s(add(N, M)) .
+
+  eq(james, james) -> tt .
+  eq(lyla, lyla) -> tt .
+  eq(harry, harry) -> tt .
+  eq(alice, alice) -> tt .
+  eq(t1.1, t1.1) -> tt .
+  eq(t1.2, t1.2) -> tt .
+  eq(t1.3, t1.3) -> tt .
+  eq(t2.1, t2.1) -> tt .
+  eq(t3.1, t3.1) -> tt .
+  eq(t3, t3) -> tt .
+  eq(t4, t4) -> tt .
+  eq(t5, t5) -> tt .
+  eq(t6, t6) -> tt .
+
+--------------------------------------------------------------
+
+endp)
+
+eof
+
+Maude> (eval passes(exam, team1, subjects1) .)
+
+The term cannot be reduced to a cterm.
+
+Maude> (eval passes(exam, team1, subjects1 ? knows(lyla, t3.1)) .)
+
+Result: p(cons(q1,cons(q2,cons(q3,cons(q4,nil)))),s(s(s(s(s(zero))))))
+
+Maude> (more .)
+
+No more results.
+
+Maude> (eval passes(exams, team1, subjects1) .)
+
+The term cannot be reduced to a cterm.
+
+Maude> (eval passes(exams, team1, subjects1 ? knows(lyla, t5)) .)
+
+Result: p(cons(q1,cons(q2.1,cons(q4.1,cons(q5,nil)))),s(s(s(s(s(zero))))))
+
+Maude> (more .)
+
+Result: p(cons(q1,cons(q3,cons(q4.1,cons(q5,nil)))),s(s(s(s(s(zero))))))
+
+Maude> (more .)
+
+No more results.
+
+
+
+

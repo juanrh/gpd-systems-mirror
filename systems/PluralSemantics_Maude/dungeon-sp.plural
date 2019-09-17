@@ -1,0 +1,71 @@
+(plural DUNGEON-PLUS is
+
+  guardians -> circe ? calypso ? aeolus ? polyphemus .
+
+  ask is sp .
+  ask(circe, trojan-gold) -> item(treasure-map) ? sirens-secret .
+  ask(calypso, sirens-secret) -> item(chest-code) .
+  ask(aeolus, item(M)) -> combine(M,M) .
+  ask(polyphemus, combine(treasure-map, chest-code)) -> key .
+
+  discover is plural .
+  discover(M) -> M ? discover(discStep(M) ? M) .
+  discStep is plural .
+  discStep(M) -> ask(guardians, M) .
+
+  askWho is sp .
+  --- (eval askWho(guardians, item(treasure-map) ? item(chest-code)) .)
+  askWho(Guardian, Message) -> p(Guardian, ask(Guardian, Message)) .
+
+  discoverHow is plural .
+  discoverHow(T) -> T ? discoverHow(discStepHow(T) ? T) .
+  discStepHow is plural .
+  discStepHow(p(W, M)) -> askWho(guardians, M) .
+
+  escape -> open(discover(trojan-gold)) .
+  escapeHow -> discoverHow(p(ulysses, trojan-gold)) .
+  open(key) -> true .
+
+endp)
+
+***(
+(eval discover(trojan-gold) .)
+(eval escape .)
+
+Maude> (eval escapeHow .)
+
+Result: p(ulysses,trojan-gold)
+
+Maude> (more .)
+
+Result: p(circe,item(treasure-map))
+
+Maude> (more .)
+
+Result: p(circe,sirens-secret)
+
+Maude> (more .)
+
+Result: p(calypso,item(chest-code))
+
+Maude> (more .)
+
+Result: p(aeolus,combine(treasure-map,treasure-map))
+
+Maude> (more .)
+
+Result: p(aeolus,combine(treasure-map,chest-code))
+
+Maude> (more .)
+
+Result: p(aeolus,combine(chest-code,treasure-map))
+
+Maude> (more .)
+
+Result: p(aeolus,combine(chest-code,chest-code))
+
+Maude> (more .)
+
+Result: p(polyphemus,key)
+
+)
