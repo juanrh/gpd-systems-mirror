@@ -1,0 +1,23 @@
+/*
+* Examples of ill-typed functions which do no produce problems during evaluation
+* 
+*/
+
+% include list functions and other commong operations
+include "misc.toy"
+
+% we have to rename our snd because misc.toy contains a snd function for pairs
+msnd :: A -> B -> B
+msnd X Y = Y
+
+f1 (msnd X) = length [X]
+
+f2 (msnd (X:Xs)) = length Xs
+
+code (msnd true) = "T"
+code (msnd false) = "F"
+code (msnd []) = "[]"
+code (msnd (X:Xs)) = code (msnd X) ++ ":" ++ code (msnd Xs)
+
+f3 (msnd X) = msnd X
+

@@ -1,0 +1,22 @@
+/*
+* Example showing the monomorphic behavior of where bindings
+*/
+
+id :: A -> A
+id X = X
+
+% Inferred type
+% f1 :: (bool, bool)
+f1 = (F true, F false) where F = id
+
+% Ill-typed because F in the where bindings is monomorphic, so it cannot have
+% types bool -> bool and char -> char
+%f2 = (F true, F 'a') where F = id
+
+% Inferred type
+% f3 :: (bool, bool, char, char)
+f3 = (F true, F false, G 'a', G 'B') where (F,G) = (id,id)
+
+% Ill-typed because F and G in the where bindings are monomorphic, so they cannot 
+% have types bool -> bool and char -> char
+%f4 = (F true, G false, F 'a', G 'B') where (F,G) = (id,id)

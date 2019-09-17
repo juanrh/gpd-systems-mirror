@@ -1,0 +1,16 @@
+/*
+* Example of type inference in a program with dependent functions: the stratified
+* inference will treat first id and then f and g using the obtained type for id
+*/
+
+% The inferred type is
+% id :: A -> A
+id X = X
+
+% The inferred type is
+% f :: bool
+f = id true
+
+% The inferred type is
+% g :: real
+g = id 0

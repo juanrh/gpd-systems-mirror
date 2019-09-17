@@ -1,0 +1,34 @@
+/*
+* Examples from illtyped.toy but moving the opaque patterns to where bindings
+*/
+
+% include list functions and other commong operations
+include "misc.toy"
+
+% we have to rename our snd because misc.toy contains a snd function for pairs
+msnd :: A -> B -> B
+msnd X Y = Y
+
+%f1 (msnd X) = length [X]
+f1 X = length [Z] where msnd Z = X
+
+f2 (msnd (X:Xs)) = length Xs
+% In Toy, lkeft-hand sides of where declarations must be plane patterns, so 
+% moving msnd (X:Xs) to a left-hand side of a where declaration is not syntatically
+% valid:
+%f2 X = length Zs where msnd (Z:Zs) = X
+
+code (msnd true) = "T"
+%code X = "T" where msnd true = X
+code (msnd false) = "F"
+%code X = "F" where msnd false = X
+code (msnd []) = "[]"
+%code X = "[]" where msnd [] = X
+code (msnd (X:Xs)) = code (msnd X) ++ ":" ++ code (msnd Xs)
+% for the same reson as f2, all rules of code cannot be written using 
+% where declarations: the bindings msnd true = X, msnd false = X,
+% msnd [] = X and msnd (X:Xs) = X are invalid
+
+% f3 (msnd X) = msnd X
+f3 X = Z where msnd Z = X
+

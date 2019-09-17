@@ -1,0 +1,13 @@
+/* 
+* Program rejected because X is critical in unpack: the pattern (snd Z) does not 
+* fix univocally the type of Z and Z occurs in the right-hand side of the rule
+*/
+
+snd :: A -> B -> B
+snd X Y = Y
+
+unpack :: (A -> A) -> B
+unpack X = Z where snd Z = X
+
+cast :: A -> B
+cast X = unpack (snd X)

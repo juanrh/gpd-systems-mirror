@@ -1,0 +1,8 @@
+/*
+* Ill-typed program since the types inferred for both rules of ugly (bool -> bool
+* and real -> bool are not a variant of the declared type for ugly (A -> bool)
+*/
+
+ugly :: A -> bool
+ugly true = true
+ugly 0 = false

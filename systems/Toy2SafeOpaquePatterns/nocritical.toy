@@ -1,0 +1,11 @@
+/* 
+* Valid program since X is not critical in f: the type of of X must be bool in 
+* the pattern snd [X,true]
+*/
+
+snd :: A -> B -> B
+snd X Y = Y
+
+% The inferred type is 
+% f :: (A -> A) -> bool
+f (snd [X,true]) = X

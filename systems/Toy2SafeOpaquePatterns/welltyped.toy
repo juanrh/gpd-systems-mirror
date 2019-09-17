@@ -1,0 +1,12 @@
+/*
+* Example of type inference in a program with independent functions
+*/
+
+% The inferred type is
+% and :: bool -> bool -> bool
+and true X = X
+and false X = false
+
+% The inferred type is
+% id :: A -> A
+id X = X

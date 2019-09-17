@@ -1,0 +1,22 @@
+/*
+* Examples of ill-typed functions which break the type preservation property
+* 
+*/
+
+snd :: A -> B -> B
+snd X Y = Y
+
+not :: bool -> bool
+not true = false
+not false = true
+
+g1 :: (A -> A) -> bool
+g1 (snd X) = not X
+% Break the type preservation property because we have the reduction
+% g1 (snd 0) :: bool ---> not 0 (ill-typed)
+
+
+g2 :: (A -> A) -> B
+g2 (snd X) = X
+% Break the type preservation property because we have the reduction
+% g2 (snd 0) :: bool ---> 0 :: int
